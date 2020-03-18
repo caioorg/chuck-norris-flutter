@@ -4,9 +4,7 @@ import 'package:chucknorris/services/api.dart';
 class Jokes extends StatefulWidget {
   final String argument;
 
-  Jokes({
-    @required this.argument
-  });
+  Jokes({@required this.argument});
 
   @override
   _JokesState createState() => _JokesState();
@@ -17,11 +15,8 @@ class _JokesState extends State<Jokes> {
 
 
   Future<Joke> onCallJokes() async {
-    return await fetchRandomJoke(widget.argument);
-  }
-
-  void _onClickUpdateJoke() {
-    onCallJokes();
+    var result = await fetchRandomJoke(widget.argument);
+    print(result);
   }
 
   @override
@@ -30,18 +25,27 @@ class _JokesState extends State<Jokes> {
       appBar: AppBar(
         title: Text('Jokes - ${widget.argument}'),
         backgroundColor: Colors.black38,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: _onClickUpdateJoke,
-          )
-        ],
       ),
       body: FutureBuilder<Joke>(
-        future: onCallJokes(),
+          future: onCallJokes(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Text(snapshot.data.value);
+              return Container(
+                  padding: EdgeInsets.all(15.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        snapshot.data.value,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 20.0,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ));
             } else if (snapshot.hasError) {
               return Text(snapshot.error.toString());
             }
